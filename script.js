@@ -41,6 +41,59 @@ const navMenu = document.querySelector(".nav-menu");
 
 const favFilterBtn = document.getElementById("favFilterBtn");
 
+const loader = document.getElementById("loader");
+const backToTop = document.getElementById("backToTop");
+const resultadosCount = document.getElementById("resultadosCount");
+const btnExplorarNav = document.getElementById("btnExplorarNav");
+const toastContainer = document.getElementById("toastContainer");
+
+/*==========================================================
+    INTERSECTION OBSERVER PARA TARJETAS
+==========================================================*/
+const cardObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if(entry.isIntersecting) {
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
+            cardObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.1 });
+
+
+/*==========================================================
+    TOASTS (retroalimentación visual breve)
+==========================================================*/
+
+function mostrarToast(mensaje, tipo = "add"){
+    if(!toastContainer) return;
+
+    const toast = document.createElement("div");
+    toast.className = `toast ${tipo === "remove" ? "toast-remove" : ""}`;
+    toast.innerHTML = `<i class="fa-solid ${tipo === "remove" ? "fa-heart-crack" : "fa-heart"}"></i><span>${mensaje}</span>`;
+
+    toastContainer.appendChild(toast);
+
+    // Forzar reflow para que la animación de entrada se ejecute
+    requestAnimationFrame(() => toast.classList.add("show"));
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+        setTimeout(() => toast.remove(), 350);
+    }, 2500);
+}
+
+/*==========================================================
+    NORMALIZAR TEXTO (quita tildes para búsquedas)
+==========================================================*/
+
+function normalizarTexto(texto){
+    return texto
+        .toString()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+}
 
 /*==========================================================
     ESTADO DE LA APLICACIÓN
@@ -72,8 +125,7 @@ const catalogo = [
     precio:12.50,
     descripcion:"Preparado con camarón fresco, leche de coco y chillangua. Uno de los platos más representativos de Esmeraldas.",
     imagen:"img/platos/encocado-camaron.jpg",
-    whatsapp:"593999111111",
-    maps:"https://maps.google.com"
+    whatsapp:"593999111111"
 },
 
 {
@@ -88,8 +140,7 @@ const catalogo = [
     precio:11.00,
     descripcion:"Pescado fresco cocinado lentamente con leche de coco y especias tradicionales.",
     imagen:"img/platos/encocado-pescado.jpg",
-    whatsapp:"593999222222",
-    maps:"https://maps.google.com"
+    whatsapp:"593999222222"
 },
 
 {
@@ -104,8 +155,7 @@ const catalogo = [
     precio:13.00,
     descripcion:"Plato típico preparado con pescado, verde, yuca y leche de coco.",
     imagen:"img/platos/tapao.jpg",
-    whatsapp:"593999333333",
-    maps:"https://maps.google.com"
+    whatsapp:"593999333333"
 },
 
 {
@@ -120,8 +170,7 @@ const catalogo = [
     precio:8.00,
     descripcion:"Conchas frescas marinadas en limón con cebolla y especias.",
     imagen:"img/platos/ceviche-concha.jpg",
-    whatsapp:"593999444444",
-    maps:"https://maps.google.com"
+    whatsapp:"593999444444"
 },
 
 {
@@ -136,8 +185,7 @@ const catalogo = [
     precio:15.00,
     descripcion:"Arroz acompañado de camarón, calamar, pescado y conchas.",
     imagen:"img/platos/arroz-marinero.jpg",
-    whatsapp:"593999555555",
-    maps:"https://maps.google.com"
+    whatsapp:"593999555555"
 },
 
 {
@@ -152,8 +200,7 @@ const catalogo = [
     precio:1.25,
     descripcion:"Masa de verde rellena de pescado y frita hasta quedar dorada.",
     imagen:"img/platos/corviche.jpg",
-    whatsapp:"593999666666",
-    maps:"https://maps.google.com"
+    whatsapp:"593999666666"
 },
 {
     id:7,
@@ -167,8 +214,7 @@ const catalogo = [
     precio:11.50,
     descripcion:"Delicioso caldo tradicional preparado con pescado, verde, yuca y leche de coco.",
     imagen:"img/platos/ensumacao.jpg",
-    whatsapp:"593999777777",
-    maps:"https://maps.google.com"
+    whatsapp:"593999777777"
 },
 
 {
@@ -183,8 +229,7 @@ const catalogo = [
     precio:9.50,
     descripcion:"Camarón fresco marinado en limón con cebolla, tomate y cilantro.",
     imagen:"img/platos/ceviche-camaron.jpg",
-    whatsapp:"593999888888",
-    maps:"https://maps.google.com"
+    whatsapp:"593999888888"
 },
 
 {
@@ -199,8 +244,7 @@ const catalogo = [
     precio:12.00,
     descripcion:"Mezcla de camarón, pescado y concha en una receta tradicional.",
     imagen:"img/platos/ceviche-mixto.jpg",
-    whatsapp:"593999123456",
-    maps:"https://maps.google.com"
+    whatsapp:"593999123456"
 },
 
 {
@@ -215,8 +259,7 @@ const catalogo = [
     precio:4.00,
     descripcion:"Bolón de verde con queso y chicharrón preparado al momento.",
     imagen:"img/platos/bolon.jpg",
-    whatsapp:"593999654321",
-    maps:"https://maps.google.com"
+    whatsapp:"593999654321"
 },
 
 {
@@ -231,8 +274,7 @@ const catalogo = [
     precio:0.50,
     descripcion:"Empanada rellena de queso y carne preparada con masa de verde.",
     imagen:"img/platos/empanada-verde.jpg",
-    whatsapp:"593999112233",
-    maps:"https://maps.google.com"
+    whatsapp:"593999112233"
 },
 
 {
@@ -247,8 +289,7 @@ const catalogo = [
     precio:1.50,
     descripcion:"Tradicional dulce artesanal elaborado con coco rallado y panela.",
     imagen:"img/platos/cocada.jpg",
-    whatsapp:"593999445566",
-    maps:"https://maps.google.com"
+    whatsapp:"593999445566"
 },
 
 {
@@ -263,8 +304,7 @@ const catalogo = [
     precio:3.00,
     descripcion:"Bebida natural preparada con coco fresco y hielo.",
     imagen:"img/platos/jugo-coco.jpg",
-    whatsapp:"593999778899",
-    maps:"https://maps.google.com"
+    whatsapp:"593999778899"
 },
 {
     id:14,
@@ -278,8 +318,7 @@ const catalogo = [
     precio:18.00,
     descripcion:"Langostinos frescos cocinados en una cremosa salsa de coco con especias tradicionales.",
     imagen:"img/platos/encocado-langostino.jpg",
-    whatsapp:"593999101010",
-    maps:"https://maps.google.com"
+    whatsapp:"593999101010"
 },
 
 {
@@ -294,8 +333,7 @@ const catalogo = [
     precio:16.50,
     descripcion:"Cazuela preparada con camarón, pescado, calamar y una deliciosa base de coco.",
     imagen:"img/platos/cazuela-mariscos.jpg",
-    whatsapp:"593999202020",
-    maps:"https://maps.google.com"
+    whatsapp:"593999202020"
 },
 
 {
@@ -310,8 +348,7 @@ const catalogo = [
     precio:5.00,
     descripcion:"Pescado fresco acompañado de arroz, patacones y ensalada.",
     imagen:"img/platos/pescado-frito.jpg",
-    whatsapp:"593999303030",
-    maps:"https://maps.google.com"
+    whatsapp:"593999303030"
 },
 
 {
@@ -326,8 +363,7 @@ const catalogo = [
     precio:7.00,
     descripcion:"Camarones empanizados y fritos, acompañados de papas y ensalada.",
     imagen:"img/platos/camarones-apanados.jpg",
-    whatsapp:"593999404040",
-    maps:"https://maps.google.com"
+    whatsapp:"593999404040"
 },
 
 {
@@ -342,8 +378,7 @@ const catalogo = [
     precio:2.50,
     descripcion:"Postre artesanal elaborado con papaya verde y panela.",
     imagen:"img/platos/dulce-papaya.jpg",
-    whatsapp:"593999505050",
-    maps:"https://maps.google.com"
+    whatsapp:"593999505050"
 },
 
 {
@@ -358,8 +393,7 @@ const catalogo = [
     precio:1.50,
     descripcion:"Empanada de verde rellena con camarón fresco y queso.",
     imagen:"img/platos/empanada-camaron.jpg",
-    whatsapp:"593999606060",
-    maps:"https://maps.google.com"
+    whatsapp:"593999606060"
 },
 
 {
@@ -374,8 +408,7 @@ const catalogo = [
     precio:2.50,
     descripcion:"Bollo tradicional preparado con verde, pescado y condimentos típicos de Esmeraldas.",
     imagen:"img/platos/bollo-pescado.jpg",
-    whatsapp:"593999707070",
-    maps:"https://maps.google.com"
+    whatsapp:"593999707070"
 }
 
 ];
@@ -386,19 +419,37 @@ const catalogo = [
 
 function renderCatalogo(lista){
 
-    catalogGrid.innerHTML = "";
+    if(resultadosCount) {
+        resultadosCount.textContent = `Mostrando ${lista.length} resultado${lista.length === 1 ? "" : "s"}`;
+    }
 
-    lista.forEach(item=>{
+    // Vista especial cuando se muestran solo los favoritos
+    catalogGrid.classList.toggle("favorites-view", mostrandoFavoritos);
+
+    // Estado vacío elegante para "Mis Favoritos"
+    if(mostrandoFavoritos && lista.length === 0){
+        catalogGrid.innerHTML = `
+            <div class="favorites-empty">
+                <i class="fa-regular fa-heart" aria-hidden="true"></i>
+                <h3>Aún no has agregado platos favoritos.</h3>
+                <p>Toca el corazón 🤍 en cualquier plato para guardarlo aquí.</p>
+            </div>
+        `;
+        return;
+    }
+
+    // Construir el HTML en un array y asignarlo una sola vez
+    // (evita múltiples reflows por cada tarjeta agregada)
+    const tarjetas = lista.map(item => {
 
         const favorito = favoritos.includes(item.id);
 
-        catalogGrid.innerHTML += `
-
+        return `
         <article class="food-card">
 
             <div class="food-image">
 
-                <img src="${item.imagen}" alt="${item.nombre}">
+                <img src="${item.imagen}" alt="${item.nombre}" loading="lazy">
 
             </div>
 
@@ -430,7 +481,9 @@ function renderCatalogo(lista){
 
                         <button
                             class="favorite-btn"
-                            data-id="${item.id}">
+                            data-id="${item.id}"
+                            aria-label="${favorito ? "Quitar de favoritos" : "Agregar a favoritos"}"
+                            aria-pressed="${favorito}">
 
                             ${favorito ? "❤️" : "🤍"}
 
@@ -443,13 +496,19 @@ function renderCatalogo(lista){
             </div>
 
         </article>
-
         `;
-
     });
 
-}
+    catalogGrid.innerHTML = tarjetas.join("");
 
+    // Observar las nuevas tarjetas insertadas para la animación
+    document.querySelectorAll(".food-card").forEach(card => {
+        card.style.opacity = "0";
+        card.style.transform = "translateY(30px)";
+        card.style.transition = "all 0.5s ease";
+        cardObserver.observe(card);
+    });
+}
 
 /*==========================================================
     INICIO
@@ -465,7 +524,7 @@ renderCatalogo(catalogo);
 
 function aplicarFiltros(){
 
-    const texto = searchInput.value.toLowerCase().trim();
+    const texto = normalizarTexto(searchInput.value.trim());
 
     const categoria = categoryFilter.value;
 
@@ -480,10 +539,12 @@ function aplicarFiltros(){
     let resultado = catalogo.filter(item=>{
 
         const coincideTexto =
-
-            item.nombre.toLowerCase().includes(texto) ||
-
-            item.restaurante.toLowerCase().includes(texto);
+            texto === "" ||
+            normalizarTexto(item.nombre).includes(texto) ||
+            normalizarTexto(item.categoria).includes(texto) ||
+            normalizarTexto(item.restaurante).includes(texto) ||
+            normalizarTexto(item.sector).includes(texto) ||
+            normalizarTexto(item.descripcion).includes(texto);
 
 
 
@@ -588,6 +649,7 @@ document.addEventListener("click",(e)=>{
     if(!e.target.classList.contains("favorite-btn")) return;
 
     const id = Number(e.target.dataset.id);
+    const plato = catalogo.find(p=>p.id===id);
 
 
 
@@ -595,11 +657,15 @@ document.addEventListener("click",(e)=>{
 
         favoritos = favoritos.filter(item=>item!==id);
 
+        if(plato) mostrarToast(`"${plato.nombre}" eliminado de favoritos`, "remove");
+
     }
 
     else{
 
         favoritos.push(id);
+
+        if(plato) mostrarToast(`"${plato.nombre}" agregado a favoritos`, "add");
 
     }
 
@@ -629,23 +695,30 @@ favFilterBtn.addEventListener("click",()=>{
 
     mostrandoFavoritos = !mostrandoFavoritos;
 
+    favFilterBtn.setAttribute("aria-pressed", mostrandoFavoritos);
+    favFilterBtn.classList.toggle("active-fav", mostrandoFavoritos);
+
 
 
     if(mostrandoFavoritos){
 
-        favFilterBtn.textContent="❤ Mostrar Todo";
+        favFilterBtn.textContent="⭐ Ver Todo el Catálogo";
 
     }
 
     else{
 
-        favFilterBtn.textContent="❤ Mostrar Favoritos";
+        favFilterBtn.textContent="⭐ Ver Mis Favoritos";
 
     }
 
 
 
     aplicarFiltros();
+
+    if(mostrandoFavoritos){
+        document.getElementById("catalogo").scrollIntoView({behavior:"smooth"});
+    }
 
 });
 
@@ -667,10 +740,47 @@ document.querySelectorAll(".nav-menu a")
 
 .forEach(link=>{
 
+    if(link.classList.contains("dropdown-toggle")) return; // El toggle abre/cierra su submenú, no debe cerrar el menú móvil
+
     link.addEventListener("click",()=>{
 
         navMenu.classList.remove("active");
 
+    });
+
+});
+
+
+
+/*==========================================================
+    DROPDOWNS DEL MENÚ (Platos / Negocios)
+    Funciona con clic/tap en cualquier dispositivo, no solo hover
+==========================================================*/
+
+document.querySelectorAll(".dropdown-toggle").forEach(toggle=>{
+
+    toggle.addEventListener("click",(e)=>{
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        const parentLi = toggle.closest(".dropdown");
+        const yaAbierto = parentLi.classList.contains("active");
+
+        document.querySelectorAll(".dropdown.active").forEach(d=>{
+            if(d !== parentLi) d.classList.remove("active");
+        });
+
+        parentLi.classList.toggle("active", !yaAbierto);
+
+    });
+
+});
+
+document.addEventListener("click",(e)=>{
+
+    document.querySelectorAll(".dropdown.active").forEach(d=>{
+        if(!d.contains(e.target)) d.classList.remove("active");
     });
 
 });
@@ -770,11 +880,20 @@ document.addEventListener("click",(e)=>{
     CERRAR MODAL
 ==========================================================*/
 
-closeModalBtn.addEventListener("click",()=>{
+function cerrarModal(){
 
-    detailsModal.classList.remove("show");
+    if(!detailsModal.classList.contains("show")) return;
 
-});
+    detailsModal.classList.add("closing");
+
+    setTimeout(()=>{
+        detailsModal.classList.remove("show");
+        detailsModal.classList.remove("closing");
+    }, 250);
+
+}
+
+closeModalBtn.addEventListener("click", cerrarModal);
 
 
 
@@ -782,7 +901,7 @@ window.addEventListener("click",(e)=>{
 
     if(e.target===detailsModal){
 
-        detailsModal.classList.remove("show");
+        cerrarModal();
 
     }
 
@@ -794,7 +913,7 @@ document.addEventListener("keydown",(e)=>{
 
     if(e.key==="Escape"){
 
-        detailsModal.classList.remove("show");
+        cerrarModal();
 
     }
 
@@ -822,7 +941,8 @@ btnWhatsapp.addEventListener("click",()=>{
 
 `https://wa.me/${elementoSeleccionado.whatsapp}?text=${encodeURIComponent(mensaje)}`,
 
-"_blank"
+"_blank",
+"noopener"
 
     );
 
@@ -834,74 +954,89 @@ btnWhatsapp.addEventListener("click",()=>{
     GOOGLE MAPS
 ==========================================================*/
 
+// No usamos coordenadas inventadas: como muchos negocios no
+// tienen geolocalización registrada, generamos una búsqueda
+// de Google Maps con el nombre del restaurante + dirección +
+// sector. Esto abre directamente el resultado más relevante
+// y es la práctica recomendada cuando no hay lat/lng reales.
 btnMaps.addEventListener("click",()=>{
 
     if(!elementoSeleccionado) return;
 
-    window.open(
+    const consulta = `${elementoSeleccionado.restaurante}, ${elementoSeleccionado.direccion}, ${elementoSeleccionado.sector}, Esmeraldas, Ecuador`;
 
-        elementoSeleccionado.maps,
+    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(consulta)}`;
 
-        "_blank"
-
-    );
+    window.open(url, "_blank", "noopener");
 
 });
 /*==========================================================
     FORMULARIO DE CONTACTO
 ==========================================================*/
 
+function mostrarErrorCampo(campo, mensaje){
+    campo.style.borderColor = "#e53935";
+    formFeedback.textContent = mensaje;
+    formFeedback.style.color = "#e53935";
+    campo.focus();
+}
+
+function limpiarErrorCampo(campo){
+    campo.style.borderColor = "";
+}
+
 reservationForm.addEventListener("submit",(e)=>{
 
     e.preventDefault();
 
+    const campoNombre = document.getElementById("clientName");
+    const campoEmail = document.getElementById("clientEmail");
+    const campoTelefono = document.getElementById("clientPhone");
+    const campoMensaje = document.getElementById("clientMessage");
 
-    const nombre =
-    document.getElementById("clientName").value;
+    [campoNombre, campoEmail, campoTelefono, campoMensaje].forEach(limpiarErrorCampo);
 
+    const nombre = campoNombre.value.trim();
+    const email = campoEmail.value.trim();
+    const telefono = campoTelefono.value.trim();
+    const mensaje = campoMensaje.value.trim();
 
-    const telefono =
-    document.getElementById("clientPhone").value;
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // Acepta números, espacios, guiones, paréntesis y un + inicial opcional
+    const regexTelefono = /^\+?[\d\s-()]{7,15}$/;
 
-
-    const mensaje =
-    document.getElementById("clientMessage").value;
-
-
-
-    if(nombre.trim()==="" ||
-       telefono.trim()==="" ||
-       mensaje.trim()===""){
-
-
-        formFeedback.textContent =
-        "Por favor completa todos los campos.";
-
-        formFeedback.style.color="red";
-
+    if(nombre === "" || nombre.length < 3){
+        mostrarErrorCampo(campoNombre, "Por favor ingresa tu nombre completo (mínimo 3 caracteres).");
         return;
-
     }
 
+    if(email === "" || !regexEmail.test(email)){
+        mostrarErrorCampo(campoEmail, "Por favor ingresa un correo electrónico válido.");
+        return;
+    }
 
+    if(telefono === "" || !regexTelefono.test(telefono)){
+        mostrarErrorCampo(campoTelefono, "Por favor ingresa un número telefónico válido (mínimo 7 dígitos).");
+        return;
+    }
+
+    if(mensaje === "" || mensaje.length < 10){
+        mostrarErrorCampo(campoMensaje, "Tu mensaje debe tener al menos 10 caracteres.");
+        return;
+    }
 
     formFeedback.textContent =
     "✅ Mensaje enviado correctamente. Nos pondremos en contacto contigo.";
 
     formFeedback.style.color="#00796B";
 
-
-
     reservationForm.reset();
-
-
 
     setTimeout(()=>{
 
         formFeedback.textContent="";
 
     },5000);
-
 
 });
 
@@ -974,74 +1109,9 @@ document.addEventListener("click",(e)=>{
 
 
 /*==========================================================
-    ANIMACIÓN DE TARJETAS
+    ANIMACIÓN DE TARJETAS (Eliminado el antiguo método)
 ==========================================================*/
-
-
-function animarTarjetas(){
-
-
-    const tarjetas =
-
-    document.querySelectorAll(".food-card");
-
-
-
-    tarjetas.forEach((tarjeta,index)=>{
-
-
-        tarjeta.style.opacity="0";
-
-        tarjeta.style.transform=
-        "translateY(30px)";
-
-
-
-        setTimeout(()=>{
-
-
-            tarjeta.style.transition=
-            "all .5s ease";
-
-
-            tarjeta.style.opacity="1";
-
-
-            tarjeta.style.transform=
-            "translateY(0)";
-
-
-        },index*100);
-
-
-
-    });
-
-
-}
-
-
-
-/*
-    Reemplazamos renderCatalogo
-    para ejecutar animaciones
-*/
-
-
-const renderOriginal = renderCatalogo;
-
-
-
-renderCatalogo = function(lista){
-
-
-    renderOriginal(lista);
-
-
-    animarTarjetas();
-
-
-};
+// Se utiliza IntersectionObserver directamente en renderCatalogo.
 
 
 
@@ -1089,22 +1159,85 @@ document.querySelectorAll('a[href^="#"]')
 
 
         if(destino){
-
-
             e.preventDefault();
-
-
             destino.scrollIntoView({
-
                 behavior:"smooth"
-
             });
-
-
         }
-
-
     });
+});
 
+/*==========================================================
+    LOADER Y VOLVER ARRIBA
+==========================================================*/
+window.addEventListener("load", () => {
+    setTimeout(() => {
+        if(loader) loader.classList.add("hidden");
+    }, 1500); // 1.5s loader duration
+});
 
+window.addEventListener("scroll", () => {
+    // Volver arriba
+    if(backToTop) {
+        if (window.scrollY > 300) {
+            backToTop.classList.add("show");
+        } else {
+            backToTop.classList.remove("show");
+        }
+    }
+
+    // Active link
+    let current = "";
+    const sections = document.querySelectorAll("section, .hero");
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (window.scrollY >= sectionTop - 150) {
+            current = section.getAttribute("id");
+        }
+    });
+    
+    document.querySelectorAll(".nav-menu a:not(.nav-filter)").forEach(link => {
+        link.classList.remove("active-link");
+        if (link.getAttribute("href") === `#${current}`) {
+            link.classList.add("active-link");
+        }
+    });
+});
+
+if(backToTop) {
+    backToTop.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
+if(btnExplorarNav) {
+    btnExplorarNav.addEventListener("click", () => {
+        const cat = document.getElementById("catalogo");
+        if(cat) cat.scrollIntoView({behavior: "smooth"});
+    });
+}
+
+// Filtros desde el Navbar
+document.querySelectorAll(".nav-filter").forEach(link => {
+    link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const type = e.target.dataset.type;
+        const value = e.target.dataset.value;
+        if(type === 'category' && categoryFilter) categoryFilter.value = value;
+        if(type === 'business' && businessFilter) businessFilter.value = value;
+
+        const dropdownAbierto = link.closest(".dropdown");
+        if(dropdownAbierto) dropdownAbierto.classList.remove("active");
+
+        if(type === 'favorites' && favFilterBtn){
+            if(!mostrandoFavoritos){
+                favFilterBtn.click();
+            } else {
+                document.getElementById("catalogo").scrollIntoView({behavior:"smooth"});
+            }
+            return;
+        }
+        aplicarFiltros();
+        document.getElementById("catalogo").scrollIntoView({behavior:"smooth"});
+    });
 });

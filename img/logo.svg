@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <linearGradient id="gradSea" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00897B" />
+      <stop offset="100%" stop-color="#004D40" />
+    </linearGradient>
+    <linearGradient id="gradSun" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff9800" />
+      <stop offset="100%" stop-color="#f57c00" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Plato / Coco -->
+  <circle cx="250" cy="250" r="220" fill="none" stroke="url(#gradSea)" stroke-width="20" stroke-linecap="round" />
+  
+  <!-- Ola del mar -->
+  <path d="M 60 280 Q 150 200 250 280 T 440 280 C 440 380 350 440 250 440 C 150 440 60 380 60 280 Z" fill="url(#gradSea)" opacity="0.85" />
+  
+  <!-- Sol / Fritada / Elemento central cálido (Camarón abstracto) -->
+  <path d="M 200 130 C 350 90 400 200 350 270 C 330 240 280 220 250 240 C 280 190 260 160 200 130 Z" fill="url(#gradSun)" />
+  
+  <!-- Hoja Tropical (Chillangua/Verde) -->
+  <path d="M 120 180 C 160 120 230 140 240 200 C 180 220 130 230 120 180 Z" fill="#4CAF50" />
+  
+  <!-- Pescado Abstracto (Líneas) -->
+  <path d="M 250 330 Q 300 300 350 330 Q 300 360 250 330 Z" fill="#ffffff" opacity="0.9" />
+  <circle cx="330" cy="330" r="5" fill="#004D40" />
+</svg>
