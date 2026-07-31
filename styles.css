@@ -156,8 +156,8 @@ LOGO
 
 .logo img{
 
-    width:52px;
-    height:52px;
+    width:65px;
+    height:65px;
     object-fit:contain;
     flex-shrink:0;
 
@@ -1094,6 +1094,20 @@ body.dark-mode .badge{
     font-size:1.1rem;
 }
 
+.whatsapp-card-btn{
+    background:#e7f9ef;
+    color:#25D366;
+    font-size:1.05rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.whatsapp-card-btn:hover{
+    background:#25D366;
+    color:#ffffff;
+}
+
 .details-btn{
 
     background:var(--primary);
@@ -1359,6 +1373,39 @@ body.dark-mode .badge{
 
     margin:25px 0;
 
+}
+
+.modal-ingredients{
+    margin:20px 0;
+    padding:16px 18px;
+    background:var(--bg-color);
+    border-radius:14px;
+    border:1px solid var(--border-color);
+}
+
+.modal-ingredients strong{
+    display:block;
+    margin-bottom:10px;
+    color:var(--dark);
+}
+
+.modal-ingredients ul{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    list-style:none;
+}
+
+.modal-ingredients li{
+    background:#e0f2f1;
+    color:var(--primary);
+    padding:6px 14px;
+    border-radius:30px;
+    font-size:.85rem;
+}
+
+body.dark-mode .modal-ingredients li{
+    background:rgba(0,191,165,.18);
 }
 
 .modal-buttons{
@@ -1655,6 +1702,25 @@ body.dark-mode .badge{
     transform: translateY(-5px);
 }
 
+.back-to-top-support {
+    right: 95px;
+    background: var(--secondary);
+}
+
+.back-to-top-support:hover {
+    background: var(--secondary-dark);
+    transform: translateY(-5px);
+}
+
+@media(max-width:480px){
+
+    .back-to-top-support {
+        right: 30px;
+        bottom: 92px;
+    }
+
+}
+
 /*==========================================================
     RESPONSIVE
 ==========================================================*/
@@ -1822,15 +1888,19 @@ body.dark-mode .badge{
 
 }
 
-@media(max-width:360px){
-
-    .hero h1{
-        font-size:1.8rem;
-    }
+@media(max-width:480px){
 
     .food-actions{
         flex-wrap:wrap;
         gap:8px;
+    }
+
+}
+
+@media(max-width:360px){
+
+    .hero h1{
+        font-size:1.8rem;
     }
 
 }

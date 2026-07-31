@@ -25,6 +25,7 @@ const modalImage = document.getElementById("modalImage");
 const modalCategory = document.getElementById("modalCategory");
 const modalTitle = document.getElementById("modalTitle");
 const modalDescription = document.getElementById("modalDescription");
+const modalIngredients = document.getElementById("modalIngredients");
 const modalRestaurant = document.getElementById("modalRestaurant");
 const modalAddress = document.getElementById("modalAddress");
 const modalHours = document.getElementById("modalHours");
@@ -43,6 +44,7 @@ const favFilterBtn = document.getElementById("favFilterBtn");
 
 const loader = document.getElementById("loader");
 const backToTop = document.getElementById("backToTop");
+const btnSoporteFlotante = document.getElementById("btnSoporteFlotante");
 const resultadosCount = document.getElementById("resultadosCount");
 const btnExplorarNav = document.getElementById("btnExplorarNav");
 const btnFavoritosNav = document.getElementById("btnFavoritosNav");
@@ -133,6 +135,7 @@ const catalogo = [
     horario:"09:00 - 21:00",
     precio:12.50,
     descripcion:"Preparado con camarón fresco, leche de coco y chillangua. Uno de los platos más representativos de Esmeraldas.",
+    ingredientes:["Camarón fresco", "Leche de coco", "Chillangua", "Cebolla", "Pimiento", "Ajo", "Achiote"],
     imagen:"img/platos/encocado-camaron.jpg",
     whatsapp:"593999111111"
 },
@@ -148,6 +151,7 @@ const catalogo = [
     horario:"08:00 - 20:00",
     precio:11.00,
     descripcion:"Pescado fresco cocinado lentamente con leche de coco y especias tradicionales.",
+    ingredientes:["Pescado fresco", "Leche de coco", "Cebolla", "Tomate", "Pimiento", "Chillangua", "Comino"],
     imagen:"img/platos/encocado-pescado.jpg",
     whatsapp:"593999222222"
 },
@@ -163,6 +167,7 @@ const catalogo = [
     horario:"09:00 - 22:00",
     precio:13.00,
     descripcion:"Plato típico preparado con pescado, verde, yuca y leche de coco.",
+    ingredientes:["Pescado", "Plátano verde", "Yuca", "Leche de coco", "Cebolla", "Cilantro"],
     imagen:"img/platos/tapao.jpg",
     whatsapp:"593999333333"
 },
@@ -178,6 +183,7 @@ const catalogo = [
     horario:"10:00 - 18:00",
     precio:8.00,
     descripcion:"Conchas frescas marinadas en limón con cebolla y especias.",
+    ingredientes:["Concha prieta fresca", "Limón", "Cebolla paiteña", "Tomate", "Cilantro", "Sal"],
     imagen:"img/platos/ceviche-concha.jpg",
     whatsapp:"593999444444"
 },
@@ -193,6 +199,7 @@ const catalogo = [
     horario:"11:00 - 22:00",
     precio:15.00,
     descripcion:"Arroz acompañado de camarón, calamar, pescado y conchas.",
+    ingredientes:["Arroz", "Camarón", "Calamar", "Pescado", "Concha", "Cebolla", "Pimiento", "Achiote"],
     imagen:"img/platos/arroz-marinero.jpg",
     whatsapp:"593999555555"
 },
@@ -208,6 +215,7 @@ const catalogo = [
     horario:"07:00 - 16:00",
     precio:1.25,
     descripcion:"Masa de verde rellena de pescado y frita hasta quedar dorada.",
+    ingredientes:["Plátano verde rallado", "Pescado", "Maní", "Cebolla", "Achiote", "Aceite"],
     imagen:"img/platos/corviche.jpg",
     whatsapp:"593999666666"
 },
@@ -222,6 +230,7 @@ const catalogo = [
     horario:"08:00 - 20:00",
     precio:11.50,
     descripcion:"Delicioso caldo tradicional preparado con pescado, verde, yuca y leche de coco.",
+    ingredientes:["Pescado", "Plátano verde", "Yuca", "Leche de coco", "Cebolla", "Culantro"],
     imagen:"img/platos/ensumacao.jpg",
     whatsapp:"593999777777"
 },
@@ -237,6 +246,7 @@ const catalogo = [
     horario:"10:00 - 21:00",
     precio:9.50,
     descripcion:"Camarón fresco marinado en limón con cebolla, tomate y cilantro.",
+    ingredientes:["Camarón fresco", "Limón", "Cebolla paiteña", "Tomate", "Cilantro", "Salsa de tomate"],
     imagen:"img/platos/ceviche-camaron.jpg",
     whatsapp:"593999888888"
 },
@@ -252,6 +262,7 @@ const catalogo = [
     horario:"09:00 - 22:00",
     precio:12.00,
     descripcion:"Mezcla de camarón, pescado y concha en una receta tradicional.",
+    ingredientes:["Camarón", "Pescado", "Concha", "Limón", "Cebolla", "Tomate", "Cilantro"],
     imagen:"img/platos/ceviche-mixto.jpg",
     whatsapp:"593999123456"
 },
@@ -267,6 +278,7 @@ const catalogo = [
     horario:"06:00 - 11:30",
     precio:4.00,
     descripcion:"Bolón de verde con queso y chicharrón preparado al momento.",
+    ingredientes:["Plátano verde", "Queso fresco", "Chicharrón", "Mantequilla", "Sal"],
     imagen:"img/platos/bolon.jpg",
     whatsapp:"593999654321"
 },
@@ -282,6 +294,7 @@ const catalogo = [
     horario:"07:00 - 18:00",
     precio:0.50,
     descripcion:"Empanada rellena de queso y carne preparada con masa de verde.",
+    ingredientes:["Plátano verde", "Queso", "Carne molida", "Cebolla", "Aceite"],
     imagen:"img/platos/empanada-verde.jpg",
     whatsapp:"593999112233"
 },
@@ -297,6 +310,7 @@ const catalogo = [
     horario:"09:00 - 19:00",
     precio:1.50,
     descripcion:"Tradicional dulce artesanal elaborado con coco rallado y panela.",
+    ingredientes:["Coco rallado", "Panela", "Agua", "Canela"],
     imagen:"img/platos/cocada.jpg",
     whatsapp:"593999445566"
 },
@@ -312,6 +326,7 @@ const catalogo = [
     horario:"09:00 - 18:00",
     precio:3.00,
     descripcion:"Bebida natural preparada con coco fresco y hielo.",
+    ingredientes:["Coco fresco", "Hielo", "Agua", "Azúcar"],
     imagen:"img/platos/jugo-coco.jpg",
     whatsapp:"593999778899"
 },
@@ -326,6 +341,7 @@ const catalogo = [
     horario:"09:00 - 22:00",
     precio:18.00,
     descripcion:"Langostinos frescos cocinados en una cremosa salsa de coco con especias tradicionales.",
+    ingredientes:["Langostinos frescos", "Leche de coco", "Cebolla", "Pimiento", "Chillangua", "Achiote"],
     imagen:"img/platos/encocado-langostino.jpg",
     whatsapp:"593999101010"
 },
@@ -341,6 +357,7 @@ const catalogo = [
     horario:"11:00 - 21:00",
     precio:16.50,
     descripcion:"Cazuela preparada con camarón, pescado, calamar y una deliciosa base de coco.",
+    ingredientes:["Camarón", "Pescado", "Calamar", "Leche de coco", "Maní", "Verde", "Cebolla"],
     imagen:"img/platos/cazuela-mariscos.jpg",
     whatsapp:"593999202020"
 },
@@ -356,6 +373,7 @@ const catalogo = [
     horario:"10:00 - 20:00",
     precio:5.00,
     descripcion:"Pescado fresco acompañado de arroz, patacones y ensalada.",
+    ingredientes:["Pescado fresco", "Arroz", "Plátano verde (patacones)", "Lechuga", "Tomate", "Limón"],
     imagen:"img/platos/pescado-frito.jpg",
     whatsapp:"593999303030"
 },
@@ -371,6 +389,7 @@ const catalogo = [
     horario:"11:00 - 22:00",
     precio:7.00,
     descripcion:"Camarones empanizados y fritos, acompañados de papas y ensalada.",
+    ingredientes:["Camarón", "Pan molido", "Huevo", "Papas", "Lechuga", "Tomate"],
     imagen:"img/platos/camarones-apanados.jpg",
     whatsapp:"593999404040"
 },
@@ -386,6 +405,7 @@ const catalogo = [
     horario:"08:00 - 18:00",
     precio:2.50,
     descripcion:"Postre artesanal elaborado con papaya verde y panela.",
+    ingredientes:["Papaya verde", "Panela", "Canela", "Clavo de olor"],
     imagen:"img/platos/dulce-papaya.jpg",
     whatsapp:"593999505050"
 },
@@ -401,6 +421,7 @@ const catalogo = [
     horario:"07:00 - 17:00",
     precio:1.50,
     descripcion:"Empanada de verde rellena con camarón fresco y queso.",
+    ingredientes:["Plátano verde", "Camarón fresco", "Queso", "Cebolla", "Aceite"],
     imagen:"img/platos/empanada-camaron.jpg",
     whatsapp:"593999606060"
 },
@@ -416,6 +437,7 @@ const catalogo = [
     horario:"08:00 - 16:00",
     precio:2.50,
     descripcion:"Bollo tradicional preparado con verde, pescado y condimentos típicos de Esmeraldas.",
+    ingredientes:["Plátano verde", "Pescado", "Cebolla", "Achiote", "Chillangua", "Hoja de plátano"],
     imagen:"img/platos/bollo-pescado.jpg",
     whatsapp:"593999707070"
 }
@@ -485,6 +507,15 @@ function renderCatalogo(lista){
                             data-id="${item.id}">
 
                             Ver más
+
+                        </button>
+
+                        <button
+                            class="whatsapp-card-btn"
+                            data-id="${item.id}"
+                            aria-label="Consultar ${item.nombre} por WhatsApp">
+
+                            <i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>
 
                         </button>
 
@@ -697,6 +728,30 @@ document.addEventListener("click",(e)=>{
 
 
 /*==========================================================
+    WHATSAPP DESDE LA TARJETA (contacto rápido)
+==========================================================*/
+
+document.addEventListener("click",(e)=>{
+
+    const boton = e.target.closest(".whatsapp-card-btn");
+    if(!boton) return;
+
+    const id = Number(boton.dataset.id);
+    const plato = catalogo.find(p=>p.id===id);
+    if(!plato) return;
+
+    const mensaje =
+    `Hola, estoy interesado en el plato "${plato.nombre}". ¿Podrían brindarme más información?`;
+
+    window.open(
+        `https://wa.me/${plato.whatsapp}?text=${encodeURIComponent(mensaje)}`,
+        "_blank",
+        "noopener"
+    );
+
+});
+
+/*==========================================================
     BOTÓN FAVORITOS
 ==========================================================*/
 
@@ -866,6 +921,13 @@ document.addEventListener("click",(e)=>{
 
         modalDescription.textContent =
         elementoSeleccionado.descripcion;
+
+        if(modalIngredients){
+            const ingredientes = elementoSeleccionado.ingredientes || [];
+            modalIngredients.innerHTML = ingredientes
+                .map(ing => `<li>${ing}</li>`)
+                .join("");
+        }
 
         modalRestaurant.textContent =
         elementoSeleccionado.restaurante;
@@ -1199,6 +1261,15 @@ window.addEventListener("scroll", () => {
         }
     }
 
+    // Botón flotante de soporte / contacto
+    if(btnSoporteFlotante) {
+        if (window.scrollY > 300) {
+            btnSoporteFlotante.classList.add("show");
+        } else {
+            btnSoporteFlotante.classList.remove("show");
+        }
+    }
+
     // Active link
     let current = "";
     const sections = document.querySelectorAll("section, .hero");
@@ -1220,6 +1291,13 @@ window.addEventListener("scroll", () => {
 if(backToTop) {
     backToTop.addEventListener("click", () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
+if(btnSoporteFlotante) {
+    btnSoporteFlotante.addEventListener("click", () => {
+        const contacto = document.getElementById("contacto");
+        if(contacto) contacto.scrollIntoView({ behavior: "smooth" });
     });
 }
 
