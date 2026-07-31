@@ -45,6 +45,7 @@ const loader = document.getElementById("loader");
 const backToTop = document.getElementById("backToTop");
 const resultadosCount = document.getElementById("resultadosCount");
 const btnExplorarNav = document.getElementById("btnExplorarNav");
+const btnFavoritosNav = document.getElementById("btnFavoritosNav");
 const toastContainer = document.getElementById("toastContainer");
 
 /*==========================================================
@@ -96,6 +97,14 @@ function normalizarTexto(texto){
 }
 
 /*==========================================================
+    CATEGORÍAS DE UN PLATO (soporta 1 o varias categorías)
+==========================================================*/
+
+function categoriasDe(item){
+    return Array.isArray(item.categoria) ? item.categoria : [item.categoria];
+}
+
+/*==========================================================
     ESTADO DE LA APLICACIÓN
 ==========================================================*/
 
@@ -116,7 +125,7 @@ const catalogo = [
 {
     id:1,
     nombre:"Encocado de Camarón",
-    categoria:"Mariscos",
+    categoria:["Mariscos", "Platos con coco"],
     negocio:"Restaurante",
     sector:"Las Palmas",
     restaurante:"Mar y Coco",
@@ -131,7 +140,7 @@ const catalogo = [
 {
     id:2,
     nombre:"Encocado de Pescado",
-    categoria:"Pescados",
+    categoria:["Pescados", "Platos con coco"],
     negocio:"Restaurante",
     sector:"Centro",
     restaurante:"El Nuevo Río",
@@ -280,7 +289,7 @@ const catalogo = [
 {
     id:12,
     nombre:"Cocada",
-    categoria:"Dulces y bebidas",
+    categoria:["Dulces y bebidas", "Platos con coco"],
     negocio:"Emprendimiento",
     sector:"Sua",
     restaurante:"Dulces del Pacífico",
@@ -295,7 +304,7 @@ const catalogo = [
 {
     id:13,
     nombre:"Jugo de Coco",
-    categoria:"Dulces y bebidas",
+    categoria:["Dulces y bebidas", "Platos con coco"],
     negocio:"Emprendimiento",
     sector:"Las Palmas",
     restaurante:"Refrescos Tropicales",
@@ -309,7 +318,7 @@ const catalogo = [
 {
     id:14,
     nombre:"Encocado de Langostino",
-    categoria:"Mariscos",
+    categoria:["Mariscos", "Platos con coco"],
     negocio:"Restaurante",
     sector:"Atacames",
     restaurante:"Mariscos Don Pepe",
@@ -455,7 +464,7 @@ function renderCatalogo(lista){
 
             <div class="food-content">
 
-                <span class="badge">${item.categoria}</span>
+                <span class="badge-group">${categoriasDe(item).map(c => `<span class="badge">${c}</span>`).join("")}</span>
 
                 <h3>${item.nombre}</h3>
 
@@ -541,7 +550,7 @@ function aplicarFiltros(){
         const coincideTexto =
             texto === "" ||
             normalizarTexto(item.nombre).includes(texto) ||
-            normalizarTexto(item.categoria).includes(texto) ||
+            categoriasDe(item).some(c => normalizarTexto(c).includes(texto)) ||
             normalizarTexto(item.restaurante).includes(texto) ||
             normalizarTexto(item.sector).includes(texto) ||
             normalizarTexto(item.descripcion).includes(texto);
@@ -552,7 +561,7 @@ function aplicarFiltros(){
 
             categoria==="all" ||
 
-            item.categoria===categoria;
+            categoriasDe(item).includes(categoria);
 
 
 
@@ -691,36 +700,40 @@ document.addEventListener("click",(e)=>{
     BOTÓN FAVORITOS
 ==========================================================*/
 
-favFilterBtn.addEventListener("click",()=>{
-
-    mostrandoFavoritos = !mostrandoFavoritos;
+function actualizarBotonesFavoritos(){
 
     favFilterBtn.setAttribute("aria-pressed", mostrandoFavoritos);
     favFilterBtn.classList.toggle("active-fav", mostrandoFavoritos);
+    favFilterBtn.textContent = mostrandoFavoritos
+        ? "⭐ Ver Todo el Catálogo"
+        : "⭐ Ver Mis Favoritos";
 
-
-
-    if(mostrandoFavoritos){
-
-        favFilterBtn.textContent="⭐ Ver Todo el Catálogo";
-
+    if(btnFavoritosNav){
+        btnFavoritosNav.setAttribute("aria-pressed", mostrandoFavoritos);
+        btnFavoritosNav.classList.toggle("active-fav", mostrandoFavoritos);
+        btnFavoritosNav.querySelector("span").textContent = mostrandoFavoritos
+            ? "Ver todo"
+            : "Favoritos";
     }
+}
 
-    else{
+function toggleVistaFavoritos(){
 
-        favFilterBtn.textContent="⭐ Ver Mis Favoritos";
+    mostrandoFavoritos = !mostrandoFavoritos;
 
-    }
-
-
+    actualizarBotonesFavoritos();
 
     aplicarFiltros();
 
-    if(mostrandoFavoritos){
-        document.getElementById("catalogo").scrollIntoView({behavior:"smooth"});
-    }
+    document.getElementById("catalogo").scrollIntoView({behavior:"smooth"});
 
-});
+}
+
+favFilterBtn.addEventListener("click", toggleVistaFavoritos);
+
+if(btnFavoritosNav){
+    btnFavoritosNav.addEventListener("click", toggleVistaFavoritos);
+}
 
 
 
@@ -846,7 +859,7 @@ document.addEventListener("click",(e)=>{
 
 
         modalCategory.textContent =
-        elementoSeleccionado.categoria;
+        categoriasDe(elementoSeleccionado).join(" · ");
 
         modalTitle.textContent =
         elementoSeleccionado.nombre;

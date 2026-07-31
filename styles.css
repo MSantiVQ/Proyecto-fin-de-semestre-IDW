@@ -345,6 +345,31 @@ ACCIONES
 
 }
 
+.cta-btn-fav{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:transparent;
+    color:#e91e63;
+    border:2px solid #e91e63;
+    padding:10px 22px;
+}
+
+.cta-btn-fav:hover{
+    background:#e91e63;
+    color:#ffffff;
+    transform:translateY(-3px);
+}
+
+.cta-btn-fav.active-fav{
+    background:#e91e63;
+    color:#ffffff;
+}
+
+.cta-btn-fav i{
+    font-size:.95rem;
+}
+
 .hamburger{
 
     display:none;
@@ -682,8 +707,33 @@ section{
     border-radius:var(--radius);
     box-shadow:var(--shadow);
     height:max-content;
+    max-height:calc(100vh - 130px);
+    overflow-y:auto;
     position:sticky;
     top:110px;
+
+    /* Barra deslizante (Firefox) */
+    scrollbar-width:thin;
+    scrollbar-color:var(--primary) var(--bg-color);
+}
+
+/* Barra deslizante personalizada (Chrome, Edge, Safari) */
+.sidebar::-webkit-scrollbar{
+    width:8px;
+}
+
+.sidebar::-webkit-scrollbar-track{
+    background:var(--bg-color);
+    border-radius:10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb{
+    background:var(--primary);
+    border-radius:10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover{
+    background:var(--secondary);
 }
 .sidebar-column {
     display: flex;
@@ -951,6 +1001,12 @@ section{
     display: flex;
     flex-direction: column;
     flex: 1;
+}
+
+.badge-group{
+    display:inline-flex;
+    flex-wrap:wrap;
+    gap:8px;
 }
 
 .badge{
@@ -1699,6 +1755,22 @@ body.dark-mode .badge{
 
         grid-template-columns:1fr;
 
+    }
+
+}
+
+@media(max-width:576px){
+
+    .cta-btn-fav span{
+        display:none;
+    }
+
+    .cta-btn-fav{
+        padding:10px 14px;
+    }
+
+    #btnExplorarNav{
+        padding:10px 16px;
     }
 
 }
