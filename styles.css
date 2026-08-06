@@ -1904,3 +1904,63 @@ body.dark-mode .modal-ingredients li{
     }
 
 }
+@media(max-width:992px){
+    .sidebar{
+        position:static;
+        max-height:none;
+    }
+    .modal-image{
+        height:260px;
+    }
+}
+
+@media(max-width:480px){
+    .logo img{
+        width:48px;
+        height:48px;
+    }
+
+    .logo span{
+        font-size:1.05rem;
+    }
+
+    .food-actions{
+        gap:8px;
+    }
+
+    .food-actions button{
+        padding:9px 14px;
+        font-size:.9rem;
+    }
+
+    .btn-primary,
+    .btn-secondary{
+        text-align:center;
+        width:100%;
+    }
+
+    .contact-info,
+    .contact-form{
+        padding:25px;
+    }
+}
+
+@media(max-width:400px){
+    .catalog-grid{
+        grid-template-columns:1fr;
+    }
+
+    .stat-card{
+        padding:25px 15px;
+    }
+}
+
+@media(max-width:340px){
+    .hero h1{
+        font-size:1.6rem;
+    }
+
+    .food-image{
+        height:180px;
+    }
+}
