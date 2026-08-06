@@ -1964,3 +1964,143 @@ body.dark-mode .modal-ingredients li{
         height:180px;
     }
 }
+@media(max-width:768px){
+    .nav-actions{
+        gap:8px;
+    }
+
+    #btnExplorarNav{
+        display:none;
+    }
+
+    .icon-btn{
+        width:40px;
+        height:40px;
+        font-size:16px;
+    }
+}
+
+@media(max-width:600px){
+    .container{
+        width:90%;
+    }
+
+    .navbar{
+        height:70px;
+    }
+
+    .logo img{
+        width:44px;
+        height:44px;
+    }
+
+    .logo span{
+        font-size:1rem;
+    }
+
+    .hero-tag{
+        font-size:.85rem;
+        padding:8px 14px;
+    }
+
+    .hero h1{
+        font-size:2rem;
+    }
+
+    .hero p{
+        font-size:1rem;
+    }
+
+    .hero-buttons{
+        flex-direction:column;
+        width:100%;
+    }
+
+    .btn-primary,
+    .btn-secondary{
+        text-align:center;
+        width:100%;
+    }
+
+    .section-title h2{
+        font-size:1.6rem;
+    }
+
+    .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:15px;
+    }
+
+    .stat-card{
+        padding:20px 10px;
+    }
+
+    .stat-card h2{
+        font-size:1.5rem;
+    }
+
+    .about-grid{
+        grid-template-columns:1fr;
+    }
+
+    .catalog-grid{
+        grid-template-columns:1fr;
+        gap:20px;
+    }
+
+    .food-image{
+        height:190px;
+    }
+
+    .food-actions{
+        flex-wrap:wrap;
+        gap:6px;
+    }
+
+    .food-actions button{
+        padding:8px 12px;
+        font-size:.85rem;
+    }
+
+    .catalog-header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .contact-info,
+    .contact-form{
+        padding:22px;
+    }
+
+    .modal-content{
+        max-height:92vh;
+    }
+
+    .modal-image{
+        height:200px;
+    }
+
+    .modal-info{
+        padding:20px;
+    }
+
+    .footer-container{
+        grid-template-columns:1fr;
+        text-align:center;
+        gap:25px;
+    }
+
+    .social-icons{
+        justify-content:center;
+    }
+}
+
+@media(max-width:360px){
+    .hero h1{
+        font-size:1.6rem;
+    }
+
+    .stats-grid{
+        grid-template-columns:1fr;
+    }
+}
